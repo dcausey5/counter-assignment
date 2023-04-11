@@ -1,50 +1,32 @@
-// import dependencies
-import React from 'react'
+//Code encourage by Youtube PedroTech
+import { render, fireEvent } from "@testing-library/react";
+import Counter from "../components/Counter";
 
-// import API mocking utilities from Mock Service Worker
-import {rest} from 'msw'
-import {setupServer} from 'msw/node'
+describe(Counter, () => {
+  it("should render initial count with value of 0", () => {
+    const { getByTestId } = render(<Counter initialCount={0} />);
+    const countValue = Number(getByTestId("count").textContent);
+    expect(countValue).toEqual(0);
+  });
 
-// import react-testing methods
-import {render, fireEvent, waitFor, screen} from '@testing-library/react'
+  it("clicking + increments the count", () => {
+    const { getByTestId, getByRole } = render(<Counter initialCount={0} />);
+    const increment = getByRole("button", { name: "+" });
+    const countValue = Number(getByTestId("count").textContent);
+    expect(countValue).toEqual(0);
+    fireEvent.click(increment);
+    const Value = Number(getByTestId("count").textContent);
+    expect(Value).toEqual(1);
+  });
 
-// add custom jest matchers from jest-dom
-import '@testing-library/jest-dom'
-// the component to test
-import counter from './Counter.js'
-let increment
-let decrement
+  it("clicking - decrements the count", () => {
+    const { getByTestId, getByRole } = render(<Counter initialCount={0} />);
+    const decrement = getByRole("button", { name: "-" });
+    expect(Number(getByTestId("count").textContent)).toEqual(0);
 
-beforeEach('render counter component',async() => {
-  // Render the Counter component here
-  render(<counter/>)
-  increment = screen.getByRole('button',{name:'+'})
-  decrement = screen.getByRole('button',{name:'-'})
+    fireEvent.click(decrement);
 
-})
-
-test('renders counter message', () => {
-  // Complete the unit test below based on the objective in the line above
-   
-});
-
-test('should render initial count with value of 0', () => {
-  // Complete the unit test below based on the objective in the line above
-  expect(counter).toHaveValue(0)
-});
-
-test('clicking + increments the count', () => {
-  // Complete the unit test below based on the objective in the line above
-  expect(counter).toHaveValue(1)
-  userEvent.click(increment)
-  expect(counter).toHaveValue(2)
-});
-
-test('clicking - decrements the count', () => {
-  // Complete the unit test below based on the objective in the line above
-  userEvent.click(increment)
-  expect(counter).toHaveValue(2)
-  userEvent.click(decrement)
-  expect(counter).toHaveValue(1)
+    expect(Number(getByTestId("count").textContent)).toEqual(-1);
+  });
 
 });
